@@ -11,7 +11,7 @@ RUN apt-get update \
  && corepack enable
 
 # Upstream template, pinned. Bump UPSTREAM_REF and the image tag together.
-ARG UPSTREAM_REF=ebde794a8656278cf26bbb2b8764be7070b325d9
+ARG UPSTREAM_REF=364d704f1ec7d987d692e123e2f933dfd10d7022
 WORKDIR /app
 RUN curl -fsSL https://codeload.github.com/mastra-ai/softwarefactory-template/tar.gz/${UPSTREAM_REF} | tar xz --strip-components=1
 
