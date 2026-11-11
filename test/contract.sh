@@ -2,11 +2,11 @@
 # Contract for the image: what Railway and a deployer rely on. Runs pgvector postgres
 # and the image in one network namespace with dummy WorkOS keys (no WorkOS call happens
 # until someone signs in), then checks boot, health, dual-stack bind and the email lock.
-#   test/contract.sh [image]   (default: builds image/ as mastra-factory-railway:test)
+#   test/contract.sh [image]   (default: builds the repo as mastra-factory-railway:test)
 set -uo pipefail
 cd "$(dirname "$0")/.."
 IMG=${1:-mastra-factory-railway:test}
-[ -n "${1:-}" ] || docker build -q -t "$IMG" image >/dev/null || { echo "build failed"; exit 1; }
+[ -n "${1:-}" ] || docker build -q -t "$IMG" . >/dev/null || { echo "build failed"; exit 1; }
 
 N=mf-contract-$$; PORT=14111
 fail=0

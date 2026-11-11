@@ -10,14 +10,13 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/* \
  && corepack enable
 
-# Upstream template, pinned. Bump UPSTREAM_REF and the image tag together.
-ARG UPSTREAM_REF=364d704f1ec7d987d692e123e2f933dfd10d7022
+# The Factory app lives in app/ (vendored from mastra-ai/softwarefactory-template; see
+# README for the upstream base commit). Install from the lockfile first for layer caching.
 WORKDIR /app
-RUN curl -fsSL https://codeload.github.com/mastra-ai/softwarefactory-template/tar.gz/${UPSTREAM_REF} | tar xz --strip-components=1
-
-COPY workos-access.ts src/mastra/workos-access.ts
-COPY patch-entry.mjs /tmp/patch-entry.mjs
-RUN node /tmp/patch-entry.mjs && npm install --no-audit --no-fund && npm run build && npm cache clean --force
+COPY app/package.json app/package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY app/ ./
+RUN npm run build && npm cache clean --force
 
 ENV NODE_ENV=production PORT=4111 MASTRA_HOST=:: MASTRA_APP_DATA_DIR=/data/app MASTRACODE_LOCAL_SANDBOX_ROOT=/data/sandboxes HOME=/data/home
 EXPOSE 4111

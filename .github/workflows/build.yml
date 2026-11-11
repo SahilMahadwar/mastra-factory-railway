@@ -3,7 +3,7 @@ name: Build and push image
 on:
   push:
     branches: [main]
-    paths: ["image/**", ".github/workflows/build.yml"]
+    paths: ["app/**", "Dockerfile", ".dockerignore", ".github/workflows/build.yml"]
   workflow_dispatch:
 
 permissions:
@@ -24,16 +24,16 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Contract test
         run: |
-          docker build -t mastra-factory-railway:test image
+          docker build -t mastra-factory-railway:test .
           test/contract.sh mastra-factory-railway:test
       - uses: docker/build-push-action@v6
         with:
-          context: image
+          context: .
           push: true
           # Railway runs amd64.
           platforms: linux/amd64
           tags: |
-            ghcr.io/${{ github.repository_owner }}/mastra-factory-railway:0.25.0-r1
+            ghcr.io/${{ github.repository_owner }}/mastra-factory-railway:0.25.0-r2
             ghcr.io/${{ github.repository_owner }}/mastra-factory-railway:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max

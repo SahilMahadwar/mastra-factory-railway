@@ -1,0 +1,9 @@
+*
+!app/
+app/node_modules
+app/.mastra
+app/.env
+app/.env.*
+!app/.env.example
+!app/.env.schema
+app/src/mastra/public
