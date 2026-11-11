@@ -26,6 +26,9 @@ jobs:
         run: |
           docker build -t mastra-factory-railway:test .
           test/contract.sh mastra-factory-railway:test
+      # GHCR repository names must be lowercase; the owner login may not be.
+      - name: Image name
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/mastra-factory-railway" >> "$GITHUB_ENV"
       - uses: docker/build-push-action@v6
         with:
           context: .
@@ -33,7 +36,7 @@ jobs:
           # Railway runs amd64.
           platforms: linux/amd64
           tags: |
-            ghcr.io/${{ github.repository_owner }}/mastra-factory-railway:0.25.0-r2
-            ghcr.io/${{ github.repository_owner }}/mastra-factory-railway:latest
+            ${{ env.IMAGE }}:0.25.0-r2
+            ${{ env.IMAGE }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max

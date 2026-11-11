@@ -22,4 +22,4 @@ Diff upstream between the base commit above and the new one, apply it to `app/`,
 
 ## Build and test
 
-`test/contract.sh` is the image contract, run in CI before every push to `ghcr.io/hmseeb/mastra-factory-railway`. Locally: `test/contract.sh` (needs Docker).
+`test/contract.sh` is the image contract, run in CI before every push to `ghcr.io/<owner>/mastra-factory-railway`. Railway builds this repo from source (root directory `/`), so the GHCR image is optional. Locally: `test/contract.sh` (needs Docker).
