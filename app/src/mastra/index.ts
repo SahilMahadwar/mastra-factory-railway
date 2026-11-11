@@ -39,6 +39,7 @@ import { LinearIntegration } from '@mastra/factory/integrations/linear/integrati
 import { SlackIntegration } from '@mastra/factory/integrations/slack/integration';
 import type { IMastraAuthProvider } from '@mastra/core/server';
 import { restrictWorkosAuth } from './workos-access.js';
+import { feedbackIssueRules } from './feedback-intake.js';
 
 /**
  * Parse a positive-integer env knob; anything else means "use the default".
@@ -201,6 +202,8 @@ const github =
         // Extra reviewer bot logins this deployment trusts to trigger
         // review/comment notifications, on top of the built-in defaults.
         authorizedBots: parseAuthorizedBotsEnv(process.env.MASTRACODE_GITHUB_AUTHORIZED_BOTS),
+        // auto-triage for issues filed from BrickChat feedback
+        rules: feedbackIssueRules,
       })
     : undefined;
 
@@ -372,7 +375,7 @@ const integrations = [
   ...(slack ? [slack] : []),
 ];
 
-export const factoryConfigVersion = 'mastracode-web-v1';
+export const factoryConfigVersion = 'mastracode-web-v1-feedback-triage';
 
 const hasPlatformSandboxEnv =
   ['MASTRA_PLATFORM_ACCESS_TOKEN', 'MASTRA_PLATFORM_SECRET_KEY'].some(key => Boolean(process.env[key]?.trim())) &&
